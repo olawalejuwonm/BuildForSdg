@@ -2,16 +2,16 @@ let severeImpact;
 let impact;
 
 const covid19ImpactEstimator = (data) => {
-  const { 
-  	region: { 
-  		avgDailyIncomeInUSD: avgDailyIncome }, reportedCases: reported_Cases,
-   totalHospitalBeds: total_HospitalBeds 
+  const {
+  	region: {
+  		avgDailyIncomeInUSD: avgDailyIncome }, reportedCases: reportedCase,
+   totalHospitalBeds: totalHospitalBed 
 } = data;
   impact = {
-    currentlyInfected: reported_Cases * 10
+    currentlyInfected: reportedCase * 10
   };
   severeImpact = {
-    currentlyInfected: reported_Cases * 50
+    currentlyInfected: reportedCase * 50
   };
   const periodType = 28;
   const factor = Math.floor(periodType / 3);
@@ -20,10 +20,10 @@ const covid19ImpactEstimator = (data) => {
   impact.SevereCasesByRequestedTime = 0.15 * impact.infectionsByRequestedTime;
   severeImpact.SevereCasesByRequestedTime = 0.15 * severeImpact.infectionsByRequestedTime;
 
-  impact.hospitalBedsByRequestedTime = Math.floor((0.35 * total_HospitalBeds) -
-   impact.SevereCasesByRequestedTime);
-  severeImpact.hospitalBedsByRequestedTime = Math.floor((0.35 * total_HospitalBeds) -
-   severeImpact.SevereCasesByRequestedTime);
+  impact.hospitalBedsByRequestedTime = Math.floor((0.35 * totalHospitalBed) 
+  	- impact.SevereCasesByRequestedTime);
+  severeImpact.hospitalBedsByRequestedTime = Math.floor((0.35 * totalHospitalBed) 
+  	- severeImpact.SevereCasesByRequestedTime);
 
   impact.casesForICUByRequestedTime = 0.05 * impact.infectionsByRequestedTime;
   severeImpact.casesForICUByRequestedTime = 0.05 * severeImpact.infectionsByRequestedTime;
