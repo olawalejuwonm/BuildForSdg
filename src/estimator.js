@@ -4,7 +4,7 @@ let impact;
 const covid19ImpactEstimator = (data) => {
   const {
     region: {
-        avgDailyIncomeInUSD: avgDailyIncome }, reportedCases: reportedCase,
+      avgDailyIncomeInUSD: avgDailyIncome }, reportedCases: reportedCase,
     totalHospitalBeds: totalHospitalBed
   } = data;
   impact = {
@@ -31,9 +31,9 @@ const covid19ImpactEstimator = (data) => {
   impact.casesForVentilatorsByRequestedTime = 0.02 * impact.infectionsByRequestedTime;
   severeImpact.casesForVentilatorsByRequestedTime = 0.02 * severeImpact.infectionsByRequestedTime;
 
-  impact.dollarsInFlight = (impact.infectionsByRequestedTime * 0.65 
+  impact.dollarsInFlight = (impact.infectionsByRequestedTime * 0.65
     * avgDailyIncome * periodType).toFixed(2);
-  severeImpact.dollarsInFlight = (severeImpact.infectionsByRequestedTime * 0.65 
+  severeImpact.dollarsInFlight = (severeImpact.infectionsByRequestedTime * 0.65
     * avgDailyIncome * periodType).toFixed(2);
 
   return {
