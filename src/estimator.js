@@ -3,10 +3,10 @@ let impact;
 
 const covid19ImpactEstimator = (data) => {
   const {
-  	region: {
-  		avgDailyIncomeInUSD: avgDailyIncome }, reportedCases: reportedCase,
-   totalHospitalBeds: totalHospitalBed 
-} = data;
+    region: {
+        avgDailyIncomeInUSD: avgDailyIncome }, reportedCases: reportedCase,
+    totalHospitalBeds: totalHospitalBed
+  } = data;
   impact = {
     currentlyInfected: reportedCase * 10
   };
@@ -20,10 +20,10 @@ const covid19ImpactEstimator = (data) => {
   impact.SevereCasesByRequestedTime = 0.15 * impact.infectionsByRequestedTime;
   severeImpact.SevereCasesByRequestedTime = 0.15 * severeImpact.infectionsByRequestedTime;
 
-  impact.hospitalBedsByRequestedTime = Math.floor((0.35 * totalHospitalBed) 
-  	- impact.SevereCasesByRequestedTime);
-  severeImpact.hospitalBedsByRequestedTime = Math.floor((0.35 * totalHospitalBed) 
-  	- severeImpact.SevereCasesByRequestedTime);
+  impact.hospitalBedsByRequestedTime = Math.floor((0.35 * totalHospitalBed)
+    - impact.SevereCasesByRequestedTime);
+  severeImpact.hospitalBedsByRequestedTime = Math.floor((0.35 * totalHospitalBed)
+    - severeImpact.SevereCasesByRequestedTime);
 
   impact.casesForICUByRequestedTime = 0.05 * impact.infectionsByRequestedTime;
   severeImpact.casesForICUByRequestedTime = 0.05 * severeImpact.infectionsByRequestedTime;
@@ -31,14 +31,14 @@ const covid19ImpactEstimator = (data) => {
   impact.casesForVentilatorsByRequestedTime = 0.02 * impact.infectionsByRequestedTime;
   severeImpact.casesForVentilatorsByRequestedTime = 0.02 * severeImpact.infectionsByRequestedTime;
 
-  impact.dollarsInFlight = (impact.infectionsByRequestedTime * 0.65 *
-   avgDailyIncome * periodType).toFixed(2);
-  severeImpact.dollarsInFlight = (severeImpact.infectionsByRequestedTime * 0.65 *
-   avgDailyIncome * periodType).toFixed(2);
+  impact.dollarsInFlight = (impact.infectionsByRequestedTime * 0.65 
+    * avgDailyIncome * periodType).toFixed(2);
+  severeImpact.dollarsInFlight = (severeImpact.infectionsByRequestedTime * 0.65 
+    * avgDailyIncome * periodType).toFixed(2);
 
-	return {
-		data, impact, severeImpact
-	};
+  return {
+    data, impact, severeImpact
+  };
 };
 
 export default covid19ImpactEstimator;
