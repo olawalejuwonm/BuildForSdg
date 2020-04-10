@@ -1,14 +1,17 @@
-var severeImpact;
-var impact;
+let severeImpact;
+let impact;
 
 const covid19ImpactEstimator = (data) => {
-  let {region:{avgDailyIncomeInUSD:avgDailyIncomeInUSD}, reportedCases: reportedCases,
-   totalHospitalBeds: totalHospitalBeds} = data;
+  const { 
+  	region: { 
+  		avgDailyIncomeInUSD: avgDailyIncome }, reportedCases: reported_Cases,
+   totalHospitalBeds: total_HospitalBeds 
+} = data;
   impact = {
-    currentlyInfected: reportedCases * 10
+    currentlyInfected: reported_Cases * 10
   };
   severeImpact = {
-    currentlyInfected: reportedCases * 50
+    currentlyInfected: reported_Cases * 50
   };
   const periodType = 28;
   const factor = Math.floor(periodType / 3);
@@ -17,10 +20,10 @@ const covid19ImpactEstimator = (data) => {
   impact.SevereCasesByRequestedTime = 0.15 * impact.infectionsByRequestedTime;
   severeImpact.SevereCasesByRequestedTime = 0.15 * severeImpact.infectionsByRequestedTime;
 
-  impact.hospitalBedsByRequestedTime = 
-    Math.floor((0.35 * totalHospitalBeds) - impact.SevereCasesByRequestedTime);
-  severeImpact.hospitalBedsByRequestedTime = 
-	Math.floor((0.35 * totalHospitalBeds) - severeImpact.SevereCasesByRequestedTime);
+  impact.hospitalBedsByRequestedTime = Math.floor((0.35 * total_HospitalBeds) -
+   impact.SevereCasesByRequestedTime);
+  severeImpact.hospitalBedsByRequestedTime = Math.floor((0.35 * total_HospitalBeds) -
+   severeImpact.SevereCasesByRequestedTime);
 
   impact.casesForICUByRequestedTime = 0.05 * impact.infectionsByRequestedTime;
   severeImpact.casesForICUByRequestedTime = 0.05 * severeImpact.infectionsByRequestedTime;
@@ -28,8 +31,10 @@ const covid19ImpactEstimator = (data) => {
   impact.casesForVentilatorsByRequestedTime = 0.02 * impact.infectionsByRequestedTime;
   severeImpact.casesForVentilatorsByRequestedTime = 0.02 * severeImpact.infectionsByRequestedTime;
 
-  impact.dollarsInFlight = (impact.infectionsByRequestedTime * 0.65 * avgDailyIncomeInUSD * periodType).toFixed(2);
-  severeImpact.dollarsInFlight = (severeImpact.infectionsByRequestedTime * 0.65 * avgDailyIncomeInUSD * periodType).toFixed(2);
+  impact.dollarsInFlight = (impact.infectionsByRequestedTime * 0.65 *
+   avgDailyIncome * periodType).toFixed(2);
+  severeImpact.dollarsInFlight = (severeImpact.infectionsByRequestedTime * 0.65 *
+   avgDailyIncome * periodType).toFixed(2);
 
 	return {
 		data, impact, severeImpact
