@@ -24,8 +24,8 @@ const covid19ImpactEstimator = (data) => {
 	};
 	const periodType = 28;
 	const factor = Math.floor(periodType / 3);
-	impact.infectionsByRequestedTime = (impact.currentlyInfected * (2 * * factor));
-	severeImpact.infectionsByRequestedTime = (severeImpact.currentlyInfected * (2 * * factor));
+	impact.infectionsByRequestedTime = (impact.currentlyInfected * (2 ** factor));
+	severeImpact.infectionsByRequestedTime = (severeImpact.currentlyInfected * (2 ** factor));
 	impact.SevereCasesByRequestedTime = 0.15 * impact.infectionsByRequestedTime;
 	severeImpact.SevereCasesByRequestedTime = 0.15 * severeImpact.infectionsByRequestedTime;
 	const totalHospitalBeds = data.totalHospitalBeds;
