@@ -1,10 +1,11 @@
 let severeImpact;
 let impact;
+let DayNumber;
 
 const covid19ImpactEstimator = (data) => {
   const {
-    region: { avgDailyIncomeInUSD: avgDailyIncome }, reportedCases: reportedCase,
-    totalHospitalBeds: totalHospitalBed
+    region: { avgDailyIncomeInUSD: avgDailyIncome, avgDailyIncomePopulation: avgPop }, periodType: perType, timeToElapse: tTE,
+     reportedCases: reportedCase, totalHospitalBeds: totalHospitalBed
   } = data;
   impact = {
     currentlyInfected: reportedCase * 10
@@ -12,29 +13,52 @@ const covid19ImpactEstimator = (data) => {
   severeImpact = {
     currentlyInfected: reportedCase * 50
   };
-  const periodType = 28;
-  const factor = Math.floor(periodType / 3);
-  impact.infectionsByRequestedTime = (impact.currentlyInfected * (2 ** factor));
-  severeImpact.infectionsByRequestedTime = (severeImpact.currentlyInfected * (2 ** factor));
-  impact.SevereCasesByRequestedTime = 0.15 * impact.infectionsByRequestedTime;
-  severeImpact.SevereCasesByRequestedTime = 0.15 * severeImpact.infectionsByRequestedTime;
+  
+  if (perType == 'days') {
+    DayNumber = tTE;
+  } else if (perType == 'weeks') {
+    DayNumber = 7 * tTE;
+  }
+  else {DayNumber = 30 * tTE;}
+  
+  const factor = Math.trunc(DayNumber / 3);
+  
+  const impactInfBrqt = impact.currentlyInfected * (2 ** factor); 
+  const sevImpactInfBrqt = severeImpact.currentlyInfected * (2 ** factor);
+  
+  impact.infectionsByRequestedTime = Math.trunc(impactInfBrqt);
+  severeImpact.infectionsByRequestedTime = Math.trunc(sevImpactInfBrqt);
+  
+  const impSevercaseBrqt = 0.15 * impactInfBrqt;
+  const sevImpSevercaseBrqt 0.15 * sevImpactInfBrqt;
 
-  impact.hospitalBedsByRequestedTime = Math.floor((0.35 * totalHospitalBed)
-    - impact.SevereCasesByRequestedTime);
-  severeImpact.hospitalBedsByRequestedTime = Math.floor((0.35 * totalHospitalBed)
-    - severeImpact.SevereCasesByRequestedTime);
+  impact.SevereCasesByRequestedTime = Math.trunc(impSevercaseBrqt);
+  severeImpact.SevereCasesByRequestedTime = Math.trunc(sevImpSevercaseBrqt);
+  
+  const availableBed = 0.35 * totalHospitalBed;
 
-  impact.casesForICUByRequestedTime = 0.05 * impact.infectionsByRequestedTime;
-  severeImpact.casesForICUByRequestedTime = 0.05 * severeImpact.infectionsByRequestedTime;
+  impact.hospitalBedsByRequestedTime = Math.trunc(availableBed
+    - impSevercaseBrqt);
+  severeImpact.hospitalBedsByRequestedTime = Math.trunc(availableBed
+    - sevImpSevercaseBrqt);
 
-  impact.casesForVentilatorsByRequestedTime = 0.02 * impact.infectionsByRequestedTime;
-  severeImpact.casesForVentilatorsByRequestedTime = 0.02 * severeImpact.infectionsByRequestedTime;
+  impact.casesForICUByRequestedTime = Math.trunc(0.05 * impactInfBrqt);
+  severeImpact.casesForICUByRequestedTime = Math.trunc(0.05 * sevImpactInfBrqt);
 
-  impact.dollarsInFlight = (impact.infectionsByRequestedTime * 0.65
-    * avgDailyIncome * periodType).toFixed(2);
-  severeImpact.dollarsInFlight = (severeImpact.infectionsByRequestedTime * 0.65
-    * avgDailyIncome * periodType).toFixed(2);
+  impact.casesForVentilatorsByRequestedTime = Math.trunc(0.02 * impactInfBrqt);
+  severeImpact.casesForVentilatorsByRequestedTime = Math.trunc(0.02 * sevImpactInfBrqt);
+  
+  const avgDInPop = Number(avgPop);
+  const avgIncome = Number(avgDailyIncome);
+  const days = Number(DayNumber);
+  
+  impDollInFlight = (impactInfBrqt * avgDInPop
+    * avgIncome) / days;
+  sevImpDollInFlight = (sevImpactInfBrqt * avgDInPop
+    * avgIncome) / days;
 
+  impact.dollarsInFlight = Math.trunc(impDollInFlight);
+  severeImpact.dollarsInFlight = Math.trunc(sevImpDollInFlight);
   return {
     data, impact, severeImpact
   };
