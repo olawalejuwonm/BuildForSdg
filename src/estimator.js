@@ -5,8 +5,8 @@ let DayNumber;
 const covid19ImpactEstimator = (data) => {
   const {
     region: { avgDailyIncomeInUSD: avgDailyIncome, avgDailyIncomePopulation: avgPop },
-     periodType: perType, timeToElapse: tTE, reportedCases: reportedCase,
-        totalHospitalBeds: totalHospitalBed
+    periodType: perType, timeToElapse: tTE, reportedCases: reportedCase,
+       totalHospitalBeds: totalHospitalBed
   } = data;
   impact = {
     currentlyInfected: reportedCase * 10
@@ -19,8 +19,9 @@ const covid19ImpactEstimator = (data) => {
     DayNumber = tTE;
   } else if (perType === 'weeks') {
     DayNumber = 7 * tTE;
-        }
-  else { DayNumber = 30 * tTE; }
+  }
+  else { DayNumber = 30 * tTE;
+  }
 
   const factor = Math.trunc(DayNumber / 3);
 
