@@ -18,23 +18,23 @@ const covid19ImpactEstimator = (data) => {
     DayNumber = tTE;
   } else if (perType === 'weeks') {
     DayNumber = 7 * tTE;
-    }
+  }
   else { DayNumber = 30 * tTE; }
 
   const factor = Math.trunc(DayNumber / 3);
 
   const impactInfBrqt = impact.currentlyInfected * (2 ** factor);
   const sevImpactInfBrqt = severeImpact.currentlyInfected * (2 ** factor);
-  
+
   impact.infectionsByRequestedTime = Math.trunc(impactInfBrqt);
   severeImpact.infectionsByRequestedTime = Math.trunc(sevImpactInfBrqt);
-  
+
   const impSevercaseBrqt = 0.15 * impactInfBrqt;
   const sevImpSevercaseBrqt = 0.15 * sevImpactInfBrqt;
 
   impact.SevereCasesByRequestedTime = Math.trunc(impSevercaseBrqt);
   severeImpact.SevereCasesByRequestedTime = Math.trunc(sevImpSevercaseBrqt);
-  
+
   const availableBed = 0.35 * totalHospitalBed;
 
   impact.hospitalBedsByRequestedTime = Math.trunc(availableBed
@@ -47,7 +47,7 @@ const covid19ImpactEstimator = (data) => {
 
   impact.casesForVentilatorsByRequestedTime = Math.trunc(0.02 * impactInfBrqt);
   severeImpact.casesForVentilatorsByRequestedTime = Math.trunc(0.02 * sevImpactInfBrqt);
-  
+
   const avgDInPop = Number(avgPop);
   const avgIncome = Number(avgDailyIncome);
   const days = Number(DayNumber);
