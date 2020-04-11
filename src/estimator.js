@@ -20,7 +20,7 @@ const covid19ImpactEstimator = (data) => {
   } else if (perType === 'weeks') {
     DayNumber = 7 * tTE;
   }
-  if (perType === 'months') {
+  else {
     DayNumber = 30 * tTE;
   }
 
