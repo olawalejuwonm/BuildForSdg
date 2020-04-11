@@ -4,8 +4,8 @@ let DayNumber;
 
 const covid19ImpactEstimator = (data) => {
   const {
-    region: { avgDailyIncomeInUSD: avgDailyIncome, avgDailyIncomePopulation: avgPop }, periodType: perType, timeToElapse: tTE,
-     reportedCases: reportedCase, totalHospitalBeds: totalHospitalBed
+    region: { avgDailyIncomeInUSD: avgDailyIncome, avgDailyIncomePopulation: avgPop },
+     periodType: perType, timeToElapse: tTE, reportedCases: reportedCase, totalHospitalBeds: totalHospitalBed
   } = data;
   impact = {
     currentlyInfected: reportedCase * 10
@@ -13,17 +13,17 @@ const covid19ImpactEstimator = (data) => {
   severeImpact = {
     currentlyInfected: reportedCase * 50
   };
-  
-  if (perType == 'days') {
+
+  if (perType === 'days') {
     DayNumber = tTE;
-  } else if (perType == 'weeks') {
+  } else if (perType === 'weeks') {
     DayNumber = 7 * tTE;
-  }
-  else {DayNumber = 30 * tTE;}
-  
+    }
+  else { DayNumber = 30 * tTE; }
+
   const factor = Math.trunc(DayNumber / 3);
-  
-  const impactInfBrqt = impact.currentlyInfected * (2 ** factor); 
+
+  const impactInfBrqt = impact.currentlyInfected * (2 ** factor);
   const sevImpactInfBrqt = severeImpact.currentlyInfected * (2 ** factor);
   
   impact.infectionsByRequestedTime = Math.trunc(impactInfBrqt);
